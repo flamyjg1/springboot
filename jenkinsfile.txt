@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git') {
+            steps {
+                echo 'fetching code from git'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/flamyjg1/springboot']])
+            }
+        }
+         stage('compile') {
+            steps {
+                echo 'compilation of the code'
+                bat 'mvn compile'
+            }
+        }
+         stage('package') {
+            steps {
+                echo 'package of the code'
+                bat 'mvn package'
+            }
+        }
+         stage('install') {
+            steps {
+                echo 'installing dependencies for the code'
+                bat 'mvn install'
+            }
+        }
+         stage('test') {
+            steps {
+                echo 'run tests for the code'
+                bat 'mvn test'
+            }
+        }
+    }
+}
